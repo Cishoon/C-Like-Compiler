@@ -1,0 +1,32 @@
+<程序> T_EOF
+T_IDENTIFIER T_INTEGER_LITERAL T_FLOAT_LITERAL T_STRING_LITERAL T_CHAR_LITERAL T_IF T_ELSE T_WHILE T_FOR T_RETURN T_INT T_FLOAT T_CHAR T_VOID T_STRUCT T_PLUS T_MINUS T_MULTIPLY T_DIVIDE T_ASSIGN T_EQUAL T_NOTEQUAL T_LESS T_LESSEQUAL T_GREATER T_GREATEREQUAL T_AND T_OR T_NOT T_MOD T_INCREMENT T_DECREMENT T_BITAND T_BITOR T_BITXOR T_BITNOT T_LEFTSHIFT T_RIGHTSHIFT T_SEMICOLON T_LEFT_BRACE T_RIGHT_BRACE T_LEFT_PAREN T_RIGHT_PAREN T_LEFT_SQUARE T_RIGHT_SQUARE T_COMMA T_DOT T_ARROW T_COLON T_QUESTION T_EOF
+
+<程序> ::= <声明列表>
+<声明列表> ::= <声明> <声明列表> | <声明>
+<声明> ::= <变量声明> | <函数声明>
+<变量声明> ::= <类型指定符> T_IDENTIFIER T_ASSIGN <表达式> T_SEMICOLON | <类型指定符> T_IDENTIFIER T_SEMICOLON | <类型指定符> T_IDENTIFIER T_LEFT_SQUARE T_INTEGER_LITERAL T_RIGHT_SQUARE T_SEMICOLON
+<类型指定符> ::= T_CONST <简单类型> | <简单类型>
+<函数声明> ::= <类型指定符> T_IDENTIFIER T_LEFT_PAREN <参数列表> T_RIGHT_PAREN <复合语句> | <类型指定符> T_IDENTIFIER T_LEFT_PAREN T_RIGHT_PAREN <复合语句>
+<参数列表> ::= <参数> | <参数列表> T_COMMA <参数>
+<参数> ::= <类型指定符> T_IDENTIFIER | <类型指定符> T_IDENTIFIER T_LEFT_SQUARE T_RIGHT_SQUARE
+<复合语句> ::= T_LEFT_BRACE <语句列表> T_RIGHT_BRACE | T_LEFT_BRACE T_RIGHT_BRACE
+<语句列表> ::= <语句> <语句列表> | <语句>
+<语句> ::= <变量声明> | <表达式语句> | <复合语句> | <选择语句> | <迭代语句> | <返回语句>
+<表达式语句> ::= <表达式> T_SEMICOLON
+<表达式> ::= <简单表达式> | <变量> T_ASSIGN <表达式>
+<变量> ::= T_IDENTIFIER | T_IDENTIFIER T_LEFT_SQUARE <表达式> T_RIGHT_SQUARE
+<简单表达式> ::= <加法表达式> | <布尔表达式>
+<布尔表达式> ::= <加法表达式> | <布尔表达式> <关系运算符> <加法表达式> | T_LEFT_PAREN <布尔表达式> <关系运算符> <加法表达式> T_RIGHT_PAREN
+<加法表达式> ::= <项> | <加法表达式> <加法运算符> <项>
+<项> ::= <因子> | <项> <乘法运算符> <因子>
+<因子> ::= T_LEFT_PAREN <表达式> T_RIGHT_PAREN | <变量> | <函数调用> | T_INTEGER_LITERAL | T_STRING_LITERAL | T_CHAR_LITERAL | T_FLOAT_LITERAL
+<函数调用> ::= T_IDENTIFIER T_LEFT_PAREN <实参> T_RIGHT_PAREN | T_IDENTIFIER T_LEFT_PAREN T_RIGHT_PAREN
+<实参> ::= <表达式> | <实参> T_COMMA <表达式>
+<简单类型> ::= T_VOID | T_FLOAT | T_INT | T_CHAR
+<加法运算符> ::= T_PLUS | T_MINUS
+<乘法运算符> ::= T_MULTIPLY | T_DIVIDE | T_MOD | T_BITAND | T_BITOR | T_BITXOR | T_LEFTSHIFT | T_RIGHTSHIFT
+<关系运算符> ::= T_LESS | T_GREATER | T_EQUAL | T_GREATEREQUAL | T_LESSEQUAL | T_NOTEQUAL | T_AND | T_OR
+<选择语句> ::= T_IF T_LEFT_PAREN <表达式> T_RIGHT_PAREN <语句> | T_IF T_LEFT_PAREN <表达式> T_RIGHT_PAREN <语句> T_ELSE <语句>
+<返回语句> ::= T_RETURN T_SEMICOLON | T_RETURN <表达式语句>
+<迭代语句> ::= T_WHILE T_LEFT_PAREN <表达式> T_RIGHT_PAREN <语句> | T_FOR T_LEFT_PAREN <可选表达式语句> <可选表达式语句> <表达式> T_RIGHT_PAREN <语句>
+<可选表达式语句> ::= <表达式语句> | T_SEMICOLON

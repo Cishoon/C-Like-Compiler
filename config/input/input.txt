@@ -1,0 +1,15 @@
+int main() {
+    int a;
+    int b;
+    int c;
+
+    b = c = 0;
+    for (a = 0; a < 100; a = a + 1) {
+        b = b + a;
+        c = c + b;
+    }
+
+    int result;
+    result = a > b;
+    return 0;
+}
