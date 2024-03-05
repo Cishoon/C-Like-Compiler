@@ -1,6 +1,6 @@
 #include <iostream>
 #include <utility>
-#include "LR1Parser.hpp"
+#include "src/LR1Parser/LR1Parser.hpp"
 
 LR1Parser::LR1Parser(const std::vector<Production> &productions, Symbol start, Symbol end)
         : productions(productions), start_symbol(std::move(start)), end_symbol(std::move(end)) {
