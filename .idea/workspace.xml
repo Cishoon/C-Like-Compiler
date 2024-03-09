@@ -25,32 +25,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6611af5e-8e4a-4fac-8698-9ea674dbbf3a" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/input/input_6个形参.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/input/input_demo.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/input/input_复杂表达式.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/input/input_斐波那契.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/input/input_累加.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/input/input_错误.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/input/input_阶乘.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/input/intput_倒数.txt" afterDir="false" />
+    <list default="true" id="6611af5e-8e4a-4fac-8698-9ea674dbbf3a" name="Changes" comment="final commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/src/Compiler/Compiler.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/src/Compiler/Compiler.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/src/Lexer/Lexer.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/src/Lexer/Lexer.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/src/MipsInstructionGenerator/CodeList.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/src/MipsInstructionGenerator/CodeList.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/src/MipsInstructionGenerator/MipsInstructionGenerator.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/src/MipsInstructionGenerator/MipsInstructionGenerator.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/src/MipsInstructionGenerator/RegisterManager.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/src/MipsInstructionGenerator/RegisterManager.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/src/MipsInstructionGenerator/StackManager.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/src/MipsInstructionGenerator/StackManager.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/src/Semantic/SemanticAnalyzer.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/src/Semantic/SemanticAnalyzer.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input/input.c" beforeDir="false" afterPath="$PROJECT_DIR$/input/input.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input/input_for.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/input_for.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Compiler/Compiler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Lexer/Lexer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lexer/Lexer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MipsInstructionGenerator/MipsInstructionGenerator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/MipsInstructionGenerator/MipsInstructionGenerator.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MipsInstructionGenerator/StackManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/MipsInstructionGenerator/StackManager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Semantic/SemanticAnalyzer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Semantic/SemanticAnalyzer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,7 +236,7 @@
       <workItem from="1709533359732" duration="25518000" />
       <workItem from="1709602912430" duration="21097000" />
       <workItem from="1709777838956" duration="35125000" />
-      <workItem from="1709888559994" duration="9101000" />
+      <workItem from="1709888559994" duration="11153000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -286,7 +262,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709602946205</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="final commit">
+      <option name="closed" value="true" />
+      <created>1709952477200</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1709952477200</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -311,7 +295,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="first commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
+    <MESSAGE value="final commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="final commit" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
