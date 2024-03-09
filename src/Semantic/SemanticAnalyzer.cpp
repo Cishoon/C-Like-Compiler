@@ -165,7 +165,8 @@ void SemanticAnalyzer::handleExpression(Symbol &lhs, const std::vector<Symbol> &
 
         if (!item.has_value()) {
             std::cerr << "未定义变量：" << name << std::endl;
-            exit(6);
+            // exit(6);
+            throw std::exception();
         }
         const VariableType type1 = item.value().type;
 
@@ -197,7 +198,8 @@ void SemanticAnalyzer::handleExpression(Symbol &lhs, const std::vector<Symbol> &
         auto item = variable_table.lookup(name);
         if (!item.has_value()) {
             std::cerr << "未定义变量：" << name << std::endl;
-            exit(6);
+            // exit(6);
+            throw std::exception();
         }
         const VariableType type1 = item.value().type;
 
@@ -348,7 +350,8 @@ void SemanticAnalyzer::handleFactor(Symbol &lhs, const std::vector<Symbol> &rhs)
             auto item = variable_table.lookup(name);
             if (!item.has_value()) {
                 std::cerr << "未定义变量：" << name << std::endl;
-                exit(6);
+                // exit(6);
+                throw std::exception();
             }
             lhs.meta.set("type", item.value().type);
             lhs.meta.set("value", name);
@@ -372,7 +375,8 @@ void SemanticAnalyzer::handleFactor(Symbol &lhs, const std::vector<Symbol> &rhs)
             lhs.meta.set("value", rhs[0].real_value);
         } else {
             std::cerr << "暂时不支持处理 factor.literal = " << _literal << std::endl;
-            exit(-1);
+            // exit(-1);
+            throw std::exception();
         }
     }
 
@@ -408,8 +412,10 @@ void SemanticAnalyzer::handleFunDeclaration(Symbol &lhs, const std::vector<Symbo
         quat.append_quaters(rhs[1].meta.get<QuaterList>("quat"));
     }
     auto name = rhs[0].meta.get<std::string>("name");
-    std::cout << name << std::endl;
-    quat.display();
+    if (show_output) {
+        std::cout << name << std::endl;
+        quat.display();
+    }
 
     auto mips_generator = MipsInstructionGenerator(quat, name);
     mips_generator.generator();
@@ -484,7 +490,8 @@ void SemanticAnalyzer::handleParam(Symbol &lhs, const std::vector<Symbol> &rhs) 
         lhs.meta.set("type", type);
     } else {
         std::cerr << "函数调用暂时不支持数组" << std::endl;
-        exit(-1);
+        // exit(-1);
+        throw std::exception();
     }
 }
 
@@ -538,7 +545,8 @@ void SemanticAnalyzer::handleFunCall(Symbol &lhs, const std::vector<Symbol> &rhs
     auto func = function_table.lookup(fun_name);
     if (!func.has_value()) {
         std::cerr << "未定义函数: " << fun_name << std::endl;
-        exit(-9);
+        // exit(-9);
+        throw std::exception();
     }
 
     QuaterList quat;
@@ -561,7 +569,8 @@ void SemanticAnalyzer::handleFunCall(Symbol &lhs, const std::vector<Symbol> &rhs
 
     if (args_num != func.value().formal_variables.size()) {
         std::cerr << "函数参数数量不匹配" << std::endl;
-        exit(11);
+        // exit(11);
+        throw std::exception();
     }
 
     // 有无返回值
@@ -762,8 +771,8 @@ void SemanticAnalyzer::handleBoolExpression(Symbol &lhs, const std::vector<Symbo
     } else if (rhs.size() == 3 && rhs[1].literal == "T_AND") {
         lhs.meta.set("type", BOOL);
 
-        const std::string &value1 = rhs[0].meta.get<std::string>("value");
-        const std::string &value2 = rhs[2].meta.get<std::string>("value");
+        // const std::string &value1 = rhs[0].meta.get<std::string>("value");
+        // const std::string &value2 = rhs[2].meta.get<std::string>("value");
         auto value = getNewTemp();
         lhs.meta.set("value", value);
 
@@ -797,8 +806,8 @@ void SemanticAnalyzer::handleBoolExpression(Symbol &lhs, const std::vector<Symbo
     } else if (rhs.size() == 3 && rhs[1].literal == "T_OR") {
         lhs.meta.set("type", BOOL);
 
-        const std::string &value1 = rhs[0].meta.get<std::string>("value");
-        const std::string &value2 = rhs[2].meta.get<std::string>("value");
+        // const std::string &value1 = rhs[0].meta.get<std::string>("value");
+        // const std::string &value2 = rhs[2].meta.get<std::string>("value");
         auto value = getNewTemp();
         lhs.meta.set("value", value);
 
@@ -837,7 +846,7 @@ void SemanticAnalyzer::handleBoolExpression(Symbol &lhs, const std::vector<Symbo
     }
 }
 
-SemanticAnalyzer::SemanticAnalyzer() {
+SemanticAnalyzer::SemanticAnalyzer(bool show_output) : show_output(show_output) {
     Function read(VariableType::INT, "read", {});
     function_table.add_func(read);
     Function write(VariableType::VOID, "write", {Variable("a", VariableType::INT, 0)});

@@ -1,14 +1,13 @@
 int main() {
-    int a;
-    int b;
-    int c;
+    int i = 0;
 
-    b = c = 0;
-    for (a = 0; a < 100; a = a + 1) {
-        b = b + a;
-        c = c + b;
+    for (i = 0; i < 20; i = i + 1) {
+        write(i);
     }
 
-    a = b = 0;
+    while(i >= 0) {
+        i = i - 1;
+        write(i);
+    }
     return 0;
 }

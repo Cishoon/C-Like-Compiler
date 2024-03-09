@@ -2,7 +2,10 @@
 
 #include <utility>
 
-Compiler::Compiler(const std::string &grammar_file_path, const std::string &input_file_path, std::string output_file_path) : output_file_path(std::move(output_file_path)) {
+Compiler::Compiler(const std::string &grammar_file_path, const std::string &input_file_path,
+                   std::string output_file_path, bool show_output) : output_file_path(std::move(output_file_path)),
+                                                                     show_output(show_output),
+                                                                     semanticAnalyzer(show_output) {
     /* 设置输入文件 */
     std::ifstream file(input_file_path);
     if (!file.is_open()) {
@@ -54,60 +57,69 @@ void Compiler::saveLastModifiedTime(const std::string &grammar_file_path, const 
 }
 
 std::time_t Compiler::fileTimeToTimeT(const std::filesystem::file_time_type &ftime) {
-    auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(ftime - fs::file_time_type::clock::now() + std::chrono::system_clock::now());
+    auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+            ftime - fs::file_time_type::clock::now() + std::chrono::system_clock::now());
     return std::chrono::system_clock::to_time_t(sctp);
 }
 
 void Compiler::compile() {
-    parser.stateStack.push(0);
+    try {
 
-    Token token;
-    do {
-        token = lexer.getNextToken();
+        parser.stateStack.push(0);
 
-        Symbol currentSymbol(SymbolType::Terminal, token.type_to_string(), token.value);
+        Token token;
+        do {
+            token = lexer.getNextToken();
+
+            Symbol currentSymbol(SymbolType::Terminal, token.type_to_string(), token.value);
 //        std::cout << currentSymbol.to_string() << std::endl;
 
-        bool shouldContinue = true;
-        while (shouldContinue) {
-            Action action = parser.get_next_action(currentSymbol);
+            bool shouldContinue = true;
+            while (shouldContinue) {
+                Action action = parser.get_next_action(currentSymbol);
 //            std::cout << action.to_string() << std::endl;
-            switch (action.type) {
-                case Action::Type::SHIFT: {
-                    shouldContinue = false;
+                switch (action.type) {
+                    case Action::Type::SHIFT: {
+                        shouldContinue = false;
 
-                    semanticAnalyzer.updateShiftSymbol(currentSymbol);
+                        semanticAnalyzer.updateShiftSymbol(currentSymbol);
 
-                    parser.stateStack.push(action.number);
-                    parser.symbolStack.push(currentSymbol);
-                    break;
-                }
-                case Action::Type::REDUCE: {
-                    std::vector<Symbol> rhs;
-                    Symbol lhs = action.production.lhs;
-
-                    for (size_t i = 0; i < action.production.rhs.size(); ++i) {
-                        rhs.insert(rhs.begin(), parser.symbolStack.top());
-                        parser.symbolStack.pop();
-                        parser.stateStack.pop();
+                        parser.stateStack.push(action.number);
+                        parser.symbolStack.push(currentSymbol);
+                        break;
                     }
-                    semanticAnalyzer.doSemanticAction(lhs, rhs);
+                    case Action::Type::REDUCE: {
+                        std::vector<Symbol> rhs;
+                        Symbol lhs = action.production.lhs;
 
-                    parser.symbolStack.push(lhs);
-                    int nextState = parser.gotoTable.at({parser.stateStack.top(), action.production.lhs});
-                    parser.stateStack.push(nextState);
-                    break;
+                        for (size_t i = 0; i < action.production.rhs.size(); ++i) {
+                            rhs.insert(rhs.begin(), parser.symbolStack.top());
+                            parser.symbolStack.pop();
+                            parser.stateStack.pop();
+                        }
+                        semanticAnalyzer.doSemanticAction(lhs, rhs);
+
+                        parser.symbolStack.push(lhs);
+                        int nextState = parser.gotoTable.at({parser.stateStack.top(), action.production.lhs});
+                        parser.stateStack.push(nextState);
+                        break;
+                    }
+                    case Action::Type::ACCEPT: {
+                        CodeList finalCode = semanticAnalyzer.getFinalCode();
+                        finalCode.display(output_file_path, show_output);
+                        std::cout << "编译成功" << std::endl;
+                        return;
+                    }
+                    default:
+                        std::cerr << "编译失败" << std::endl;
+                        std::cerr << lexer.getCurrentRowCol() << std::endl;
+                        return;
                 }
-                case Action::Type::ACCEPT: {
-                    CodeList finalCode = semanticAnalyzer.getFinalCode();
-                    finalCode.display(output_file_path, true);
-                    std::cout << "编译成功" << std::endl;
-                    return;
-                }
-                default:
-                    std::cerr << "编译失败" << std::endl;
-                    return;
             }
-        }
-    } while(token.type != T_EOF);
+        } while (token.type != T_EOF);
+    }
+    catch (...) {
+        std::cerr << "编译失败" << std::endl;
+        std::cerr << lexer.getCurrentRowCol() << std::endl;
+    }
 }

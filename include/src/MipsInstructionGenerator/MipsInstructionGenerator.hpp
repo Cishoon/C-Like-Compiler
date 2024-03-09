@@ -2,6 +2,7 @@
 
 #include "src/Quater/QuaterList.hpp"
 #include <vector>
+#include <set>
 #include "src/MipsInstructionGenerator/RegisterManager.hpp"
 #include "StackManager.hpp"
 
@@ -17,6 +18,9 @@ private:
 private:
     CodeList code_list;
     const std::string &func_name;
+
+private:
+    std::set<size_t> labels;
 
 public:
     explicit MipsInstructionGenerator(const QuaterList &quaterList, const std::string &func_name = "") :
@@ -64,6 +68,7 @@ private:
 
     void handleCall(const Quater &quater, const size_t &index);
 
+    void handleJump(const Quater &quater, const size_t &index);
 };
 
 

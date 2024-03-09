@@ -1,0 +1,30 @@
+int program(int a, int b, int c) {
+    int i;
+    int j;
+    i = 0;
+    if (a > (b + c)) {
+        j = a + (b * c + 1);
+    }
+    else {
+        j = a;
+    }
+    while (i <= 100) {
+        i = j * 2;
+        j = j * 2; // 测试样例这里一定会死循环，增加了一行
+    }
+    return i;
+}
+
+int demo(int a) {
+    a = a + 2;
+    return a * 2;
+}
+
+int main() {
+    int a = 3;
+    int b = 4;
+    int c = 2;
+    a = program(a, b, demo(c));
+    write(a);
+    return 0;
+}

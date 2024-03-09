@@ -1,0 +1,12 @@
+int add_many(int a, int b, int c, int d, int e, int f) {
+    return a + b + c + d + e + f;
+}
+int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int a = 1; int b = 2;
+    add(a, b);
+    return 0;
+}

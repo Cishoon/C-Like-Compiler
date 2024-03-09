@@ -1,0 +1,12 @@
+
+int main() {
+    int res = 0;
+    int i;
+    for (i = 0; i < 100; i = i + 1) {
+        res = res + i;
+        write(res);
+    }
+    i = i;
+    res = res;
+    return 0;
+}

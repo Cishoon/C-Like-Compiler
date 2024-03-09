@@ -10,7 +10,7 @@ class Compiler {
 private:
     std::string output_file_path;
 public:
-    explicit Compiler(const std::string &grammar_file_path, const std::string &input_file_path, std::string output_file_path);
+    explicit Compiler(const std::string &grammar_file_path, const std::string &input_file_path, std::string output_file_path, bool show_output);
 
     void compile();
 
@@ -18,7 +18,7 @@ private:
     Lexer lexer;
     LR1Parser parser;
     SemanticAnalyzer semanticAnalyzer;
-
+    bool show_output;
 
 private:
     static bool needsReParsing(const std::string &grammar_file_path, const std::string &cache_time_path);

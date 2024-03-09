@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utility>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -7,39 +8,51 @@
 #include <sstream>
 #include "src/common/utils.hpp"
 
+class CodeBlock {
+public:
+    std::string code;
+    bool top;
+
+    explicit CodeBlock(std::string code, bool top = false)
+        : code(std::move(code)), top(top) {}
+};
+
 class CodeList {
 public:
-    std::vector<std::pair<std::string, bool>> code_list;
-    /**
-     *
-     * @param str
-     * @param top 输出的时候是否顶格
-     */
-    void emplace_back(const std::string& str, bool top = false) {
+    std::vector<CodeBlock> code_list;
+
+    void emplace_back(const std::string& str, const bool& top = false) {
         code_list.emplace_back(str, top);
     }
+
+    void emplace_front(const std::string& str, const bool& top = false) {
+        CodeBlock codeBlock(str, top);
+        code_list.insert(code_list.begin() + 2, codeBlock);
+    }
+
     void display(const std::string& path = "", bool show_in_terminal = true) {
         if (show_in_terminal) {
-            for(const auto&  [item, top] : code_list) {
-                if (top) {
-                    std::cout << item << std::endl;
+            for(const auto& block : code_list) {
+                if (block.top) {
+                    std::cout << block.code << std::endl;
                 } else {
-                    std::cout << "\t" << item << std::endl;
+                    std::cout << "\t" << block.code << std::endl;
                 }
             }
         }
 
         if (!path.empty()) {
             std::ofstream fout(path);
-            for(const auto&  [item, top] : code_list) {
-                if (top) {
-                    fout << item << std::endl;
+            for(const auto& block : code_list) {
+                if (block.top) {
+                    fout << block.code << std::endl;
                 } else {
-                    fout << "\t" << item << std::endl;
+                    fout << "\t" << block.code << std::endl;
                 }
             }
         }
     }
+
     void append(const CodeList& list) {
         code_list.insert(code_list.end(), list.code_list.begin(), list.code_list.end());
     }

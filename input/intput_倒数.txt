@@ -1,0 +1,10 @@
+void fun(int a) {
+    if (a == 0) {return;}
+    write(a);
+    fun(a - 1);
+}
+
+int main() {
+    int a = read();
+    fun(a);
+}

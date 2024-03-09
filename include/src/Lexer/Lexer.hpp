@@ -3,11 +3,16 @@
 #include "Token.hpp"
 #include <string>
 #include <map>
+#include <sstream>
 
 class Lexer {
 private:
 	std::string input;
 	size_t index = 0;
+    size_t col = 0;
+    size_t row = 1;
+    std::string current_line;
+    std::string pre_line;
 
 	char peek();
 	char getChar();
@@ -82,4 +87,5 @@ public:
 	explicit Lexer() = default;
     void setInput(std::string _input);
 	Token getNextToken();
+    std::string getCurrentRowCol();
 };

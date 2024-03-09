@@ -20,8 +20,12 @@ private:
 
 private:
     CodeList finalMips;
+
+private:
+    bool show_output;
+
 public:
-    SemanticAnalyzer();
+    SemanticAnalyzer(bool show_output = false);
 
     /**
      * 移进的时候，要处理的语法制导

@@ -12,6 +12,15 @@ char Lexer::peek() {
 }
 
 char Lexer::getChar() {
+    if (input[index] == '\n') {
+        row++;
+        col = 0;
+        pre_line = current_line;
+        current_line.clear();
+    } else {
+        col++;
+        current_line += input[index];
+    }
     return input[index++];
 }
 
@@ -124,7 +133,8 @@ void Lexer::skipComment() {
                 if (peek() == '\0') {
                     // 提示错误：多行注释没有正确关闭
                     std::cerr << "Error: Unclosed multi-line comment" << std::endl;
-                    exit(2);
+                    // exit(2);
+                    throw std::exception();
                 }
                 getChar();
             }
@@ -173,4 +183,25 @@ Token Lexer::getNextToken() {
 
 void Lexer::setInput(std::string _input) {
     this->input = std::move(_input);
+}
+
+std::string Lexer::getCurrentRowCol() {
+    while(input[index] != '\n') {
+        current_line+=input[index];
+        index++;
+    }
+    pre_line.back() = '\n';
+    current_line.back() = '\n';
+
+    std::stringstream ss;
+    ss << "当前位置 row: " << row << " col: " << col << '\n';
+    ss << row -1 << ": " << pre_line << row << ": " << current_line;
+    for (int i = 0; i < std::to_string(row).size() + 2; i++) {
+        ss << " ";
+    }
+    for (int i = 0; i < col - 1 ; i++) {
+        ss << "-";
+    }
+    ss << "^\n";
+    return ss.str();
 }

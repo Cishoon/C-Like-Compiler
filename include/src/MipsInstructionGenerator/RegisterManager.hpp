@@ -6,6 +6,7 @@
 #include "src/common/dlog.hpp"
 #include "src/MipsInstructionGenerator/CodeList.hpp"
 #include <sstream>
+#include <stack>
 
 // std::string tReg(const size_t &pos);
 
@@ -106,13 +107,15 @@ private:
         auto var_id = regs[pos].variable_id;
         auto &var = variables[var_id];
         var.load = false;
-        var.offset = new_stack_position();
+        if (var.offset == -1) {
+            var.offset = new_stack_position();
+        }
 
-        // 写入mips代码
         std::stringstream ss;
-        ss << "sw " << tReg(var) << ", 0($sp)";
+        ss << "sw " << tReg(var) << ", ";
+        if (var.offset != 0) ss << "-";
+        ss << var.offset << "($fp)";
         code_list.emplace_back(ss.str());
-        code_list.emplace_back("addi $sp, $sp, -4");
     }
 
     size_t stack_pointer; // default = 0
@@ -127,7 +130,6 @@ private:
         if (var.load) {
             return var;
         }
-
         expire_old_interval(current_point);
         if (count_busy_register() == REG_NUMS) {
             spill();
@@ -152,7 +154,7 @@ private:
     }
 
 public:
-    size_t get_stack_pointer() const { return stack_pointer; }
+    [[nodiscard]] size_t get_stack_pointer() const { return stack_pointer; }
 
 /**
      * 给一个变量分配一个寄存器
@@ -246,12 +248,30 @@ public:
         std::cout << "-----------------------------------" << std::endl;
     }
 
+    std::stack<std::string> reserve_regs;
     void spill_all(const size_t &current_point) {
         expire_old_interval(current_point);
         for (auto i = 0; i < regs.size(); i++) {
             if (regs[i].busy) {
+                reserve_regs.push(regs[i].variable_id);
                 spill_reg_to_memory(i);
             }
+        }
+    }
+
+    void reserve_all() {
+        while(!reserve_regs.empty()){
+            auto var_id = reserve_regs.top();
+            auto& var = variables[var_id];
+            reserve_regs.pop();
+            put_variable_in_register(var, var.pos);
+            var.load = true;
+
+            std::stringstream ss;
+            ss << "lw " << tReg(var) << ", ";
+            if (var.offset != 0) ss << "-";
+            ss << var.offset << "($fp)";
+            code_list.emplace_back(ss.str());
         }
     }
 
@@ -265,6 +285,7 @@ public:
 
         var.pos = pos;
         variables[var.variable_id] = var;
+        var.load = true;
     }
 };
 

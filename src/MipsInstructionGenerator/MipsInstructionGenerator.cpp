@@ -40,7 +40,22 @@ void MipsInstructionGenerator::generator() {
 
     for (const auto &[index, quater]: quater_list) {
         if (quater.is_jump()) {
+            labels.insert(atoll(quater.result.c_str()));
+        }
+    }
 
+    for (const auto &[index, quater]: quater_list) {
+        // 如果是某个跳转语句目标位置，增加label
+        if (labels.find(index) != labels.end()) {
+            std::stringstream ss;
+            ss << func_name << "_label" << index << ":";
+            code_list.emplace_back(ss.str(), true);
+        }
+
+        if (quater.is_jump()) {
+            // 如果跳转到最后一条语句之后，去掉这条语句的翻译
+            if (atoll(quater.result.c_str()) >= quater_list.size()) continue;
+            handleJump(quater, index);
         } else if (quater.op == "=") {
             handleAssign(quater, index);
         } else if (quater.op == "+") {
@@ -62,6 +77,19 @@ void MipsInstructionGenerator::generator() {
         }
     }
 
+    auto stack_depth = registerManager.get_stack_pointer();
+    if (stack_depth != 0) {
+        // 分配局部变量空间
+        code_list.emplace_front("addi $sp, $sp, -" + std::to_string(stack_depth));
+        // 在每一个jr之前，释放局部变量空间
+        for (auto it = code_list.code_list.begin(); it != code_list.code_list.end(); it++) {
+            const auto& item = *it;
+            if (UTILS::start_with(item.code, "jr")) {
+                code_list.code_list.insert(it, CodeBlock("addi $sp, $sp, " + std::to_string(stack_depth)));
+                it++;
+            }
+        }
+    }
 }
 
 std::pair<size_t, size_t> MipsInstructionGenerator::get_interval(const std::string &var_id) {
@@ -138,7 +166,7 @@ void MipsInstructionGenerator::handleAssign(const Quater &quater, const size_t &
         // (=, param0, _, a)
         // (=, param4, _, a)
         // 如果是第4个以上形参，从栈里读取; 否则放到寄存器里
-        if (a_arg1.param >= 4){
+        if (a_arg1.param >= 4) {
             ss << "lw " << tReg(a_res) << ", " << 4 * (a_arg1.param - 4) << "($fp)";
             code_list.emplace_back(ss.str());
         } else {
@@ -290,8 +318,6 @@ void MipsInstructionGenerator::handleReturn(const Quater &quater, const size_t &
         }
     }
 
-    auto stack_depth = registerManager.get_stack_pointer();
-    if (stack_depth != 0) code_list.emplace_back("addi $sp, $sp, " + std::to_string(stack_depth));
     code_list.emplace_back("jr $ra");
 }
 
@@ -322,7 +348,7 @@ void MipsInstructionGenerator::handleParam(const Quater &quater, const size_t &i
 void MipsInstructionGenerator::handleCall(const Quater &quater, const size_t &index) {
     // arg1 里是调用的函数名，result是返回的结果存在哪里，如果为空表示没有返回
     const std::string &arg1 = quater.arg1, &arg2 = quater.arg2, &result = quater.result;
-    const auto& args = quater.meta.get<std::vector<Variable>>("args");
+    const auto &args = quater.meta.get<std::vector<Variable>>("args");
 
     // 保存现场
     save_context(index);
@@ -358,6 +384,9 @@ void MipsInstructionGenerator::handleCall(const Quater &quater, const size_t &in
         code_list.emplace_back("addi $sp, $sp, " + std::to_string((args.size() - 4) * 4));
     }
 
+    // 恢复现场
+    load_context();
+
     // 将返回结果存下来
     if (!result.empty()) {
         auto a_res = alloc_a_variable(quater, result, index, "result");
@@ -365,12 +394,9 @@ void MipsInstructionGenerator::handleCall(const Quater &quater, const size_t &in
         ss << "move " << tReg(a_res) << ", $v0";
         code_list.emplace_back(ss.str());
     }
-
-    // 恢复现场
-    load_context();
 }
 
-void MipsInstructionGenerator::save_context(const size_t& current_point) {
+void MipsInstructionGenerator::save_context(const size_t &current_point) {
     registerManager.spill_all(current_point); // 把所有寄存器清空
     stackManager.push_list(context_list);
     // for (auto &it: context_list) {
@@ -380,7 +406,41 @@ void MipsInstructionGenerator::save_context(const size_t& current_point) {
 
 void MipsInstructionGenerator::load_context() {
     stackManager.pop_list(context_list);
+    registerManager.reserve_all();
     // for (auto it = context_list.rbegin(); it != context_list.rend(); it++) {
     //     stackManager.pop(*it);
     // }
+}
+
+void MipsInstructionGenerator::handleJump(const Quater &quater, const size_t &index) {
+    /*
+     *
+     */
+    const std::string &arg1 = quater.arg1, &arg2 = quater.arg2, &result = quater.result;
+
+    std::stringstream ss;
+
+    if (quater.op == "j") {
+        ss << "j " << func_name << "_label" << result;
+        code_list.emplace_back(ss.str());
+        return;
+    }
+
+    auto [a_arg1, a_arg2] =
+            alloc_variable_pair(quater, arg1, arg2, index, "arg1", "arg2");
+
+    if (quater.op == "j<") {
+        ss << "blt " << tReg(a_arg1) << ", " << tReg(a_arg2) << ", " << func_name << "_label" << result;
+    } else if (quater.op == "j>") {
+        ss << "bgt " << tReg(a_arg1) << ", " << tReg(a_arg2) << ", " << func_name << "_label" << result;
+    } else if (quater.op == "j<=") {
+        ss << "ble " << tReg(a_arg1) << ", " << tReg(a_arg2) << ", " << func_name << "_label" << result;
+    } else if (quater.op == "j>=") {
+        ss << "bge " << tReg(a_arg1) << ", " << tReg(a_arg2) << ", " << func_name << "_label" << result;
+    } else if (quater.op == "j==") {
+        ss << "beq " << tReg(a_arg1) << ", " << tReg(a_arg2) << ", " << func_name << "_label" << result;
+    } else if (quater.op == "j!=") {
+        ss << "bne " << tReg(a_arg1) << ", " << tReg(a_arg2) << ", " << func_name << "_label" << result;
+    }
+    code_list.emplace_back(ss.str());
 }
