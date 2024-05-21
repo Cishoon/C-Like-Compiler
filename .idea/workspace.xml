@@ -25,8 +25,15 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6611af5e-8e4a-4fac-8698-9ea674dbbf3a" name="Changes" comment="final commit">
+    <list default="true" id="6611af5e-8e4a-4fac-8698-9ea674dbbf3a" name="Changes" comment="报告">
+      <change afterPath="$PROJECT_DIR$/2151610-郑星云-编译原理课程设计.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/编译原理课程设计说明书文档.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/运行说明.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grammar/grammar.cache.time" beforeDir="false" afterPath="$PROJECT_DIR$/grammar/grammar.cache.time" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/src/Variable/VariableTable.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/src/Variable/VariableTable.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input/input.c" beforeDir="false" afterPath="$PROJECT_DIR$/input/input.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/编译原理课程设计.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,18 +196,18 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Google Test.RegisterManagerTest.TestMethod2" />
+      <item itemvalue="Google Test.RegisterManagerTest.TestMethod" />
+      <item itemvalue="Google Test.RegisterManager.TestRegisterManager" />
+      <item itemvalue="Google Test.TestForAdd.test3" />
+      <item itemvalue="Google Test.Tests" />
       <item itemvalue="CMake Application.C_Like_Compiler" />
+      <item itemvalue="CMake Application.Tests" />
       <item itemvalue="CMake Application.gmock" />
       <item itemvalue="CMake Application.gmock_main" />
       <item itemvalue="CMake Application.gtest" />
       <item itemvalue="CMake Application.gtest_main" />
-      <item itemvalue="CMake Application.Tests" />
       <item itemvalue="CTest Application.All CTest" />
-      <item itemvalue="Google Test.Tests" />
-      <item itemvalue="Google Test.RegisterManager.TestRegisterManager" />
-      <item itemvalue="Google Test.RegisterManagerTest.TestMethod" />
-      <item itemvalue="Google Test.RegisterManagerTest.TestMethod2" />
-      <item itemvalue="Google Test.TestForAdd.test3" />
     </list>
     <recent_temporary>
       <list>
@@ -237,6 +244,12 @@
       <workItem from="1709602912430" duration="21097000" />
       <workItem from="1709777838956" duration="35125000" />
       <workItem from="1709888559994" duration="11153000" />
+      <workItem from="1712198968831" duration="2000" />
+      <workItem from="1712561543341" duration="7000" />
+      <workItem from="1715593247679" duration="482000" />
+      <workItem from="1715593777209" duration="928000" />
+      <workItem from="1715932427153" duration="702000" />
+      <workItem from="1716260290843" duration="3000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -299,6 +312,15 @@
     <option name="LAST_COMMIT_MESSAGE" value="final commit" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/Semantic/SemanticAnalyzer.cpp</url>
+          <line>192</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
         <watch expression="a_arg1" />

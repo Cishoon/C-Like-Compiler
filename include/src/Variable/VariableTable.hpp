@@ -6,9 +6,10 @@
 #include <iostream>
 #include <any>
 #include <utility>
-
+#include <optional>
 
 #include "Variable.hpp"
+
 
 class VariableTable {
     std::vector<Variable> variables;
